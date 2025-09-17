@@ -1,0 +1,66 @@
+name: Multi-Branch Deployment
+
+on:
+  push:
+    branches: 
+      - main
+      - dev
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'   # change to Python setup if your project is Python
+
+      - name: Install dependencies
+        run: npm install       # if Python: pip install -r requirements.txt
+
+      - name: Run lint
+        run: npm run lint      # if Python: flake8 .
+
+      - name: Run tests
+        run: npm test          # if Python: pytest
+
+      - name: Create artifact
+        run: echo "Build or test results" > artifact.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: artifact.txt
+
+  deploy_qa:
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
+      - name: Deploy to QA
+        run: echo "🚀 Deploying to QA environment with artifact:" && cat artifact.txt
+
+  deploy_prod:
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
+      - name: Deploy to Production
+        run: echo "🚀 Deploying to PRODUCTION environment with artifact:" && cat artifact.txt
