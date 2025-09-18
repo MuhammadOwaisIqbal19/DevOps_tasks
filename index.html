@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wonders of Nature</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1026;
+      --primary: #22c55e; /* emerald */
+      --secondary: #38bdf8; /* sky */
+      --accent: #f59e0b; /* amber */
+      --rose: #fb7185; /* rose */
+      --lavender: #a78bfa; /* violet */
+      --text: #e6f1ff;
+      --muted: #a7b3c6;
+      --card: #121735;
+      --glass: rgba(255,255,255,0.08);
+      --shadow: 0 20px 40px rgba(0,0,0,0.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: linear-gradient(120deg, #0b1026 0%, #0e1b3d 40%, #041421 100%);
+      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Animated aurora background */
+    .aurora {
+      position: fixed; inset: -20vmax; z-index: -1; filter: blur(60px); opacity: .55;
+      background: radial-gradient(35vmax 35vmax at 10% 10%, rgba(56,189,248,.45), transparent 60%),
+                  radial-gradient(30vmax 30vmax at 80% 20%, rgba(34,197,94,.35), transparent 60%),
+                  radial-gradient(35vmax 35vmax at 30% 80%, rgba(245,158,11,.35), transparent 60%),
+                  radial-gradient(40vmax 40vmax at 90% 80%, rgba(251,113,133,.35), transparent 60%);
+      animation: float 20s ease-in-out infinite alternate;
+    }
+    @keyframes float { to { transform: translate3d(0,-40px,0) scale(1.05); } }
+
+    header {
+      position: sticky; top: 0; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(2,6,23,0.85), rgba(2,6,23,0.35));
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      z-index: 50;
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .3px; }
+    .brand-logo { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: linear-gradient(135deg, var(--secondary), var(--lavender)); box-shadow: var(--shadow); }
+
+    .nav a { color: var(--text); text-decoration: none; margin: 0 12px; font-weight: 600; opacity: .85; }
+    .nav a:hover { opacity: 1; }
+
+    .hero { max-width: 1200px; margin: 0 auto; padding: 80px 22px 60px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+    .title { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 66px); line-height: 1.05; margin: 0 0 14px; }
+    .title span {
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .subtitle { color: var(--muted); font-size: clamp(16px, 2.1vw, 20px); margin-bottom: 26px; }
+
+    .cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn { border: 0; cursor: pointer; font-weight: 700; padding: 12px 18px; border-radius: 999px; transition: transform .2s ease, box-shadow .2s ease; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #031018; box-shadow: 0 10px 25px rgba(56,189,248,.35); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.2); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
+
+    .hero-illustration {
+      background: radial-gradient(120% 120% at 100% 0%, rgba(167,139,250,.18), transparent),
+                  linear-gradient(180deg, rgba(34,197,94,.15), rgba(56,189,248,.10));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 22px; position: relative; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .hero-illustration svg { width: 100%; height: auto; display: block; }
+
+    .section { max-width: 1200px; margin: 0 auto; padding: 70px 22px; }
+    .section h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 3.6vw, 40px); margin: 0 0 14px; }
+    .section p.lead { color: var(--muted); max-width: 760px; }
+
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 26px; }
+    .card { background: linear-gradient(180deg, var(--glass), rgba(255,255,255,0.03)); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); transition: transform .2s ease; }
+    .card:hover { transform: translateY(-4px); }
+    .card .tag { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; padding: 6px 10px; border-radius: 999px; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.35); }
+    .card .emoji { font-size: 18px; }
+    .card h3 { margin: 12px 0 6px; }
+    .card p { color: var(--muted); }
+
+    .quote { margin-top: 34px; padding: 24px 26px; border-left: 4px solid var(--lavender); background: linear-gradient(180deg, rgba(167,139,250,.12), rgba(167,139,250,.06)); border-radius: 8px; }
+
+    .gallery { margin-top: 30px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .gallery figure { position: relative; margin: 0; padding-top: 70%; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+    .gallery img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(1.2) contrast(1.05); transition: transform .35s ease; }
+    .gallery figure:hover img { transform: scale(1.06); }
+    .gallery .w-6 { grid-column: span 6; }
+    .gallery .w-4 { grid-column: span 4; }
+    .gallery .w-8 { grid-column: span 8; }
+
+    .parallax {
+      position: relative; min-height: 46vh; display: grid; place-items: center; text-align: center; padding: 60px 22px;
+      background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2000&auto=format&fit=crop') center/cover fixed;
+      border-block: 1px solid rgba(255,255,255,0.1);
+    }
+    .parallax .overlay {
+      position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2,6,23,0.45), rgba(2,6,23,0.75)); backdrop-filter: blur(2px);
+    }
+    .parallax .content { position: relative; z-index: 1; }
+    .badge { display: inline-block; padding: 8px 12px; border-radius: 999px; background: rgba(56,189,248,0.22); border: 1px solid rgba(56,189,248,0.5); font-size: 14px; }
+
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+    .fact { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 18px 20px; }
+    .fact h4 { margin: 0 0 6px; font-family: 'Playfair Display', serif; }
+    .fact p { margin: 0; color: var(--muted); }
+
+    footer { margin-top: 50px; padding: 30px 22px; text-align: center; color: var(--muted); background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.08); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .hero { grid-template-columns: 1fr; padding-top: 60px; }
+    }
+    @media (max-width: 720px) {
+      .cards { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: repeat(6, 1fr); }
+      .gallery .w-8 { grid-column: span 6; }
+      .gallery .w-6 { grid-column: span 6; }
+      .gallery .w-4 { grid-column: span 6; }
+      .facts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2l2.39 4.84L20 8l-4 3.9L17 18l-5-2.8L7 18l1-6.1L4 8l5.61-1.16L12 2z" fill="white" fill-opacity=".9"/>
+          </svg>
+        </div>
+        <span>Wonders of Nature</span>
+      </div>
+      <div>
+        <a href="#ecosystems">Ecosystems</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#facts">Facts</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <h1 id="hero-title" class="title">YES Explore <span>Colors of Nature</span></h1>
+        <p class="subtitle">From emerald forests to sapphire seas, nature paints our world in breathtaking hues. Discover the ecosystems, wildlife, and rhythms that keep our planet alive.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#gallery">See the beauty</a>
+          <a class="btn btn-ghost" href="#facts">Learn something new</a>
+        </div>
+      </div>
+      <div class="hero-illustration" role="img" aria-label="Abstract illustration of mountains, sun, ocean and forest">
+        <!-- Decorative SVG Landscape -->
+        <svg viewBox="0 0 800 560" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7dd3fc"/>
+              <stop offset="100%" stop-color="#0ea5e9"/>
+            </linearGradient>
+            <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fde68a"/>
+              <stop offset="100%" stop-color="#f59e0b"/>
+            </linearGradient>
+            <linearGradient id="mountain" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#22c55e"/>
+              <stop offset="100%" stop-color="#16a34a"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="560" fill="url(#sky)"/>
+          <circle cx="650" cy="120" r="60" fill="url(#sun)" opacity=".95"/>
+          <path d="M0 360 L160 220 L300 360 Z" fill="url(#mountain)"/>
+          <path d="M300 360 L460 200 L640 360 Z" fill="#15803d"/>
+          <rect y="360" width="800" height="120" fill="#0ea5e9" opacity=".9"/>
+          <rect y="480" width="800" height="80" fill="#0c4a6e"/>
+          <g opacity=".85">
+            <circle cx="90" cy="400" r="8" fill="#f0fdf4"/>
+            <circle cx="120" cy="410" r="6" fill="#dcfce7"/>
+            <circle cx="150" cy="398" r="7" fill="#bbf7d0"/>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section id="ecosystems" class="section" aria-labelledby="ecosystems-title">
+      <h2 id="ecosystems-title">Vibrant Ecosystems</h2>
+      <p class="lead">Every ecosystem beats with its own pulse—interconnected species, flowing energy, and cycles of renewal. Here are a few stars of the show.</p>
+      <div class="cards">
+        <article class="card" aria-label="Forests">
+          <span class="tag"><span class="emoji">🌳</span> Forests</span>
+          <h3>Emerald Canopies</h3>
+          <p>Forests store carbon, cradle biodiversity, and gift us clean air. From tropical rainforests to boreal woodlands, they’re Earth’s green lungs.</p>
+        </article>
+        <article class="card" aria-label="Oceans">
+          <span class="tag" style="background: rgba(56,189,248,.15); border-color: rgba(56,189,248,.35);"><span class="emoji">🌊</span> Oceans</span>
+          <h3>Sapphire Realms</h3>
+          <p>Covering 70% of Earth, oceans regulate climate and foster life from coral reefs to giant whales—an endless, shimmering blue.</p>
+        </article>
+        <article class="card" aria-label="Mountains">
+          <span class="tag" style="background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.35);"><span class="emoji">⛰️</span> Mountains</span>
+          <h3>Golden Peaks</h3>
+          <p>Mountains birth rivers, shape weather, and shelter unique cultures and species. Their slopes are archives of deep time.</p>
+        </article>
+        <article class="card" aria-label="Wildlife">
+          <span class="tag" style="background: rgba(251,113,133,.15); border-color: rgba(251,113,133,.35);"><span class="emoji">🦋</span> Wildlife</span>
+          <h3>Living Kaleidoscope</h3>
+          <p>Pollinators, predators, and everything between weave complex food webs—each species a vibrant thread in the tapestry of life.</p>
+        </article>
+      </div>
+      <blockquote class="quote">
+        “In every walk with nature one receives far more than he seeks.” — John Muir
+      </blockquote>
+    </section>
+
+    <section id="gallery" class="section" aria-labelledby="gallery-title">
+      <h2 id="gallery-title">Colorful Gallery</h2>
+      <p class="lead">A splash of landscapes to brighten your day. All images are from Unsplash and optimized for speed.</p>
+      <div class="gallery">
+        <figure class="w-8">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Sunlit forest with green canopy" />
+        </figure>
+        <figure class="w-4">
+          <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=1200&auto=format&fit=crop" alt="Colorful coral reef underwater" />
+        </figure>
+        <figure class="w-6">
+          <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?q=80&w=1400&auto=format&fit=crop" alt="Mountain range under a pastel sky" />
+        </figure>
+        <figure class="w-6">
+          <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=1400&auto=format&fit=crop" alt="Lavender field at sunset" />
+        </figure>
+        <figure class="w-4">
+          <img src="https://images.unsplash.com/photo-1494783367193-149034c05e8f?q=80&w=1200&auto=format&fit=crop" alt="Close-up of a butterfly on a flower" />
+        </figure>
+        <figure class="w-8">
+          <img src="https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=1600&auto=format&fit=crop" alt="Ocean waves with sunlight" />
+        </figure>
+      </div>
+    </section>
+
+    <section id="facts" class="section" aria-labelledby="facts-title">
+      <h2 id="facts-title">Quick Nature Facts</h2>
+      <p class="lead">Tiny facts, big wonder. Explore a few bite-sized insights about our living planet.</p>
+      <div class="facts">
+        <div class="fact">
+          <h4>Forests & Oxygen</h4>
+          <p>Rainforests produce significant oxygen and absorb vast amounts of CO₂, helping balance our atmosphere.</p>
+        </div>
+        <div class="fact">
+          <h4>Ocean Depths</h4>
+          <p>We’ve mapped Mars more than the deep sea; most of the ocean remains unexplored and full of surprises.</p>
+        </div>
+        <div class="fact">
+          <h4>Pollinator Power</h4>
+          <p>Bees, birds, and bats pollinate many crops—supporting food for billions of people worldwide.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="parallax" aria-label="Nature parallax banner">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="content">
+        <span class="badge">Take a breath</span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(28px, 4.5vw, 48px); margin: 12px 0 6px;">
+          Protect the Places You Love
+        </h2>
+        <p style="max-width: 720px; margin: 0 auto; color: #e6f1ff; opacity: .9;">
+          Small steps—planting a tree, saving water, reducing waste—add up to big change. Let’s keep Earth colorful.
+        </p>
+        <div class="cta" style="justify-content: center; margin-top: 16px;">
+          <a class="btn btn-primary" href="#top">Get Involved</a>
+          <a class="btn btn-ghost" href="#ecosystems">Learn More</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with 🌿 and gratitude for our planet • © <span id="year"></span>
+  </footer>
+
+  <script>
+    // Update year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
