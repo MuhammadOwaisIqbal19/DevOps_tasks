@@ -1,10 +1,7 @@
-export default [
+module.exports = [
   {
     files: ["**/*.js"],
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module"
-    },
+    languageOptions: { ecmaVersion: "latest" },
     rules: {
       semi: "error",
       quotes: ["error", "double"]
