@@ -1,0 +1,17 @@
+{
+  "name": "devops-tasks",
+  "version": "1.0.0",
+  "description": "Dummy project for CI/CD assignment",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"Running dummy tests... SUCCESS ✅\" && exit 0",
+    "build": "echo \"Fake build successful ✅\" && exit 0",
+    "start": "echo \"Starting dummy app...\""
+  },
+  "devDependencies": {
+  "eslint": "^9.0.0"
+},
+
+  "author": "Your Name",
+  "license": "MIT"
+}
